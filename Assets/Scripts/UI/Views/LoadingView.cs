@@ -18,7 +18,7 @@ public class LoadingView : View {
 	}
 
 	public override void Hide() {
-		if(this.exitAnim != null && this.isExiting == false && this.isActiveAndEnabled) {
+		if(this.exitAnim != null && this.isExiting == false && this.enabled) {
 			StartCoroutine(this.PlayExitAnim());
 			this.isExiting = true;
 		}

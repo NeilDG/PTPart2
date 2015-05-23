@@ -344,7 +344,7 @@ ModelImporter:
       takeName: walk01
       firstFrame: -1
       lastFrame: 39
-      wrapMode: 0
+      wrapMode: 2
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -370,7 +370,7 @@ ModelImporter:
       takeName: walk02
       firstFrame: -1
       lastFrame: 39
-      wrapMode: 0
+      wrapMode: 2
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0

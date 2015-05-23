@@ -11,8 +11,6 @@ public class FootstepPlayer : MonoBehaviour {
 	private float nextPlayTime = 0.0f;
 	private float currentPlayTime = 0.0f;
 
-	private int stepIncrement = 0;
-
 	// Use this for initialization
 	void Start () {
 		this.nextPlayTime += FOOTSTEP_PLAY_DELAY;
@@ -36,12 +34,8 @@ public class FootstepPlayer : MonoBehaviour {
 		if(this.currentPlayTime >= FOOTSTEP_PLAY_DELAY) {
 			this.currentPlayTime = 0.0f;
 
-			this.audioSteps[stepIncrement % audioSteps.Length].Play();
-			stepIncrement++;
+			this.audioSteps[Random.Range(0, this.audioSteps.Length)].Play();
 
-			if(stepIncrement == audioSteps.Length - 1) {
-				stepIncrement = 0;
-			}
 		}
 	}
 }

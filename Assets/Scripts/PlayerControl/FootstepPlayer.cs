@@ -7,7 +7,7 @@ using System.Collections;
 public class FootstepPlayer : MonoBehaviour {
 	[SerializeField] private AudioSource[] audioSteps;
 
-	private const float FOOTSTEP_PLAY_DELAY = 1.0f;
+	private const float FOOTSTEP_PLAY_DELAY = 0.5f;
 	private float nextPlayTime = 0.0f;
 	private float currentPlayTime = 0.0f;
 

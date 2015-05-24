@@ -8,5 +8,5 @@ public class EnemyConstants {
 	public const float CHASE_SPEED = 5.0f;
 
 	public const float PATROL_STOPPING_DISTANCE = 0.0f;
-	public const float CHASE_STOPPING_DISTANCE = 100.0f;
+	public const float CHASE_STOPPING_DISTANCE = 3.0f;
 }

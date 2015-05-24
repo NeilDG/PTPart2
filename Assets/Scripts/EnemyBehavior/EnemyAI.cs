@@ -9,6 +9,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 	[SerializeField] private NavMeshAgent navMeshAgent;
 	[SerializeField] private Transform target;
 	[SerializeField] private EnemyTriggerRadius enemyTriggerRadius;
+	[SerializeField] private EnemyAnimation enemyAnim;
 
 	private Transform playerLocation;
 
@@ -21,7 +22,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 		IDLE,
 		PATROLLING,
 		CHASING,
-		SHOOTING,
+		ATTACKING,
 	}
 
 	private EnemyState currentEnemyState = EnemyState.ACTIVE;
@@ -68,7 +69,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 			break;
 		case EnemyActionType.CHASING:
 			break;
-		case EnemyActionType.SHOOTING:
+		case EnemyActionType.ATTACKING:
 			break;
 		}
 	}
@@ -88,16 +89,14 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 	private void TransitionToIdle() {
 		this.currentActionType = EnemyActionType.IDLE;
 		this.navMeshAgent.ResetPath ();
-		this.StartCoroutine (this.DelaySwitchAction (0.5f, EnemyActionType.PATROLLING, this.TransitionToPatrolling));
+		this.enemyAnim.SetAnimationFromType (EnemyActionType.IDLE);
+		this.StartCoroutine (this.DelaySwitchAction (2.5f, EnemyActionType.PATROLLING, this.TransitionToPatrolling));
 	}
 
 	private void TransitionToChasing() {
 		this.currentActionType = EnemyActionType.CHASING;
 		this.navMeshAgent.speed = EnemyConstants.CHASE_SPEED;
-	}
-
-	private void TransitionToShooting() {
-		this.currentActionType = EnemyActionType.SHOOTING;
+		this.enemyAnim.SetAnimationFromType (this.currentActionType);
 	}
 
 	private void HandleTriggerEnter(Collider other) {
@@ -120,7 +119,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 		if (playerControl != null) {
 			this.playerInSight = false;
 
-			Debug.Log("Player is within trigger!");
+			//Debug.Log("Player is within trigger!");
 			// Create a vector from the enemy to the player and store the angle between it and forward.
 			Vector3 direction = other.transform.position - transform.position;
 			float angle = Vector3.Angle(direction, transform.forward);
@@ -129,21 +128,18 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 			if(angle < EnemyConstants.FIELD_OF_VIEW_ANGLE * 0.5f)
 			{
 				this.playerInSight = true;
-				
-				Debug.Log("Player can be seen by " +this.gameObject.name);
 				this.lastPlayerSighting = playerControl.transform.position;
 				
 				this.TransitionToChasing();
 				this.navMeshAgent.SetDestination(this.lastPlayerSighting);
-				
-				if(this.navMeshAgent.remainingDistance <= EnemyConstants.CHASE_STOPPING_DISTANCE) {
-					
-					Debug.LogWarning("Pew pew pew!");
+
+				if(Vector3.Distance(this.lastPlayerSighting, this.transform.position) <= EnemyConstants.CHASE_STOPPING_DISTANCE) {
+					this.enemyAnim.PlayAttackAnim();
 					this.navMeshAgent.Stop();
 					
 				}
-				
 				else {
+					this.TransitionToChasing();
 					this.navMeshAgent.Resume();
 				}
 			}
@@ -163,6 +159,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 		yield return new WaitForSeconds (seconds);
 		transitionFunction ();
 		this.currentActionType = actionType;
+		this.enemyAnim.SetAnimationFromType (this.currentActionType);
 	}
 
 	public void Pause() {

@@ -33,8 +33,8 @@ public class AtmosphereHandler : MonoBehaviour {
 	private const int MAX_AMBIENCE_DELAY = 10;
 
 	private const float BGM_FADEIN_TIME = 2.0f;
-	//private const float MAX_BGM_PLAY_TIME = 5.0f;
 	private const float BGM_FADEOUT_TIME = 8.0f;
+	private const float AMBIENT_START_DELAY = 20.0f;
 
 	void Awake () {
 		sharedInstance = this;
@@ -94,7 +94,7 @@ public class AtmosphereHandler : MonoBehaviour {
 	}
 
 	private void CreateAmbientFeel() {
-		this.StartCoroutine (this.PlayRandomAmbienceAndWait ());
+		this.StartCoroutine (this.DelayAmbientFeel ());
 	}
 
 	private void CreateBGM() {
@@ -104,6 +104,11 @@ public class AtmosphereHandler : MonoBehaviour {
 		this.bgmSource.Play ();
 
 		this.bgmSource.volume = 0.0f;
+	}
+
+	private IEnumerator DelayAmbientFeel() {
+		yield return new WaitForSeconds (AMBIENT_START_DELAY);
+		this.StartCoroutine (this.PlayRandomAmbienceAndWait ());
 	}
 
 	private IEnumerator PlayRandomAmbienceAndWait() {

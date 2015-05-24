@@ -120,6 +120,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 		if (playerControl != null) {
 			this.playerInSight = false;
 
+			Debug.Log("Player is within trigger!");
 			// Create a vector from the enemy to the player and store the angle between it and forward.
 			Vector3 direction = other.transform.position - transform.position;
 			float angle = Vector3.Angle(direction, transform.forward);
@@ -127,34 +128,23 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 			// If the angle between forward and where the player is, is less than half the angle of view...
 			if(angle < EnemyConstants.FIELD_OF_VIEW_ANGLE * 0.5f)
 			{
-				RaycastHit hit;
-				// ... and if a raycast towards the player hits something...
-				if(Physics.Raycast(transform.position + transform.up, direction.normalized, out hit))
-				{
-
-					// ... and if the raycast hits the player...
-					if(hit.collider.gameObject == playerControl.gameObject)
-					{
-						// ... the player is in sight.
-						this.playerInSight = true;
-
-						Debug.Log("Player can be seen by " +this.gameObject.name);
-						this.lastPlayerSighting = playerControl.transform.position;
-
-						this.TransitionToChasing();
-						this.navMeshAgent.SetDestination(this.lastPlayerSighting);
-
-						if(this.navMeshAgent.remainingDistance <= EnemyConstants.CHASE_STOPPING_DISTANCE) {
-
-							Debug.LogWarning("Pew pew pew!");
-							this.navMeshAgent.Stop();
-
-						}
-
-						else {
-							this.navMeshAgent.Resume();
-						}
-					}
+				this.playerInSight = true;
+				
+				Debug.Log("Player can be seen by " +this.gameObject.name);
+				this.lastPlayerSighting = playerControl.transform.position;
+				
+				this.TransitionToChasing();
+				this.navMeshAgent.SetDestination(this.lastPlayerSighting);
+				
+				if(this.navMeshAgent.remainingDistance <= EnemyConstants.CHASE_STOPPING_DISTANCE) {
+					
+					Debug.LogWarning("Pew pew pew!");
+					this.navMeshAgent.Stop();
+					
+				}
+				
+				else {
+					this.navMeshAgent.Resume();
 				}
 			}
 		}

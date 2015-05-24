@@ -6,7 +6,8 @@ public class LightController : MonoBehaviour
 	[System.Serializable]
 	private struct LightRange
 	{
-		public float updateAmount;
+		public float increaseAmount;
+		public float decreaseAmount;
 		public float minValue;
 		public float maxValue;
 	}
@@ -14,7 +15,8 @@ public class LightController : MonoBehaviour
 	[System.Serializable]
 	private struct LightIntensity
 	{
-	    public float updateAmount;
+	    public float increaseAmount;
+		public float decreaseAmount;
 		public float minValue;
 		public float maxValue;
 	}
@@ -23,7 +25,7 @@ public class LightController : MonoBehaviour
 
 	[SerializeField] private CharacterController charControl;
 	[SerializeField] private LightRange lightRange;
-	[SerializeField] private LightIntensity lightIntensity;
+	//[SerializeField] private LightIntensity lightIntensity;
 
 	// Use this for initialization
 	void Start () {
@@ -35,25 +37,41 @@ public class LightController : MonoBehaviour
 	{
 		Vector3 directionVector = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 		bool isMoving = directionVector != Vector3.zero;
-		this.UpdateLightSourceRange(lightRange.updateAmount, isMoving);
-		this.UpdateLightIntensity(lightIntensity.updateAmount, isMoving);
+
+		this.UpdateLightSourceRange(isMoving);
+		//this.UpdateLightIntensity(isMoving);
 	}
 
-	private void UpdateLightSourceRange(float amount, bool decrease = false)
+	private void UpdateLightSourceRange(bool decrease = false)
 	{
-		amount = decrease == true ? amount * -1 : amount;
-		this.lightSource.range += amount;
-		this.lightSource.range = Mathf.Clamp(lightSource.range, 
-		                                     lightRange.minValue, 
-		                                     lightRange.maxValue);
+		if (decrease == true) {
+			this.lightSource.range -= lightRange.decreaseAmount;
+			this.lightSource.range = Mathf.Clamp(lightSource.range, 
+			                                     lightRange.minValue, 
+			                                     lightRange.maxValue);
+		}
+		else {
+			this.lightSource.range += lightRange.increaseAmount;
+			this.lightSource.range = Mathf.Clamp(lightSource.range, 
+			                                     lightRange.minValue, 
+			                                     lightRange.maxValue);
+		}
+	
 	}
 
-	private void UpdateLightIntensity(float amount, bool decrease = false)
+	/*private void UpdateLightIntensity(bool decrease = false)
 	{
-		amount = decrease == true ? amount * -1 : amount;
-		this.lightSource.intensity += amount;
-		this.lightSource.intensity = Mathf.Clamp(lightSource.intensity, 
-		                                         lightIntensity.minValue, 
-		                                         lightIntensity.maxValue);
-	}
+		if (decrease == true) {
+			this.lightSource.intensity -= lightIntensity.decreaseAmount;
+			this.lightSource.intensity = Mathf.Clamp(lightSource.intensity, 
+			                                         lightIntensity.minValue, 
+			                                         lightIntensity.maxValue);
+		}
+		else {
+			this.lightSource.intensity += lightIntensity.increaseAmount;
+			this.lightSource.intensity = Mathf.Clamp(lightSource.intensity, 
+			                                         lightIntensity.minValue, 
+			                                         lightIntensity.maxValue);
+		}
+	}*/
 }

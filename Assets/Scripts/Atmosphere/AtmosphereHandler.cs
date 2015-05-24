@@ -64,7 +64,7 @@ public class AtmosphereHandler : MonoBehaviour {
 		case BGMState.PLAYING:
 			this.bgmMeasureTime = Time.time - this.startTime;
 
-			Debug.Log ("Measure time: " +this.bgmMeasureTime+ " Clip length: " +this.bgmSource.clip.length);
+			//Debug.Log ("Measure time: " +this.bgmMeasureTime+ " Clip length: " +this.bgmSource.clip.length);
 			if(this.bgmMeasureTime >= this.bgmSource.clip.length - BGM_FADEOUT_TIME) {
 				this.startTime = Time.time;
 				this.bgmMeasureTime = 0.0f;

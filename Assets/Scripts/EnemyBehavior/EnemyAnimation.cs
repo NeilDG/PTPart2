@@ -15,6 +15,7 @@ public class EnemyAnimation : MonoBehaviour {
 
 	[SerializeField] private AudioSource[] footstepAudioList;
 	[SerializeField] private AudioClip[] idleSoundList;
+	[SerializeField] private AudioClip[] chaseSoundList;
 
 	[SerializeField] private AudioSource monsterSoundSource;
 
@@ -23,9 +24,10 @@ public class EnemyAnimation : MonoBehaviour {
 
 	private const float CHANCE_TO_MAKE_IDLE_NOISE = 100.0f; //out of 100;
 	private const float IDLE_TIMEOUT_SOUND_PLAY = 2.0f;
+	private const float CHASE_TIMEOUT_SOUND_PLAY = 1.0f;
 
 	private float footstepPlayTime = 0.0f;
-	private float idleTimeoutTime = 0.0f;
+	private float soundTimeoutTime = 0.0f;
 	private EnemyAI.EnemyActionType enemyActionType;
 
 	private bool attacking = false;
@@ -42,6 +44,7 @@ public class EnemyAnimation : MonoBehaviour {
 		}
 		else if(this.enemyActionType == EnemyAI.EnemyActionType.CHASING) {
 			this.PlayFootstep(FOOTSTEP_CHASE_DELAY);
+			this.PlayRandomChaseSound();
 		}
 		else if(this.enemyActionType == EnemyAI.EnemyActionType.IDLE) {
 			this.footstepPlayTime = 0.0f;
@@ -61,31 +64,36 @@ public class EnemyAnimation : MonoBehaviour {
 	}
 
 	private void PlayRandomIdleSound() {
-		this.idleTimeoutTime += Time.deltaTime;
-		if (this.makingNoise == false && this.idleTimeoutTime >= IDLE_TIMEOUT_SOUND_PLAY) {
+		this.soundTimeoutTime += Time.deltaTime;
+		if (this.makingNoise == false && this.soundTimeoutTime >= IDLE_TIMEOUT_SOUND_PLAY) {
 			float chance = Random.Range(0.0f, 100.0f);
 
 			if(chance <= CHANCE_TO_MAKE_IDLE_NOISE) {
 				this.makingNoise = true;
 				this.monsterSoundSource.clip = this.idleSoundList[Random.Range(0,this.idleSoundList.Length)];
 				this.monsterSoundSource.Play();
-				this.StartCoroutine(this.ObserveIdleSound());
+				this.StartCoroutine(this.ObserveSound(0.0f));
 			}
 			else {
-				this.idleTimeoutTime = 0.0f;
+				this.soundTimeoutTime = 0.0f;
 			}
 		}
 	}
 
-	private void PlayRandomAlertSound() {
-
+	private void PlayRandomChaseSound() {
+		if(this.makingNoise == false) {
+			this.makingNoise = true;
+			this.monsterSoundSource.clip = this.chaseSoundList[Random.Range(0,this.chaseSoundList.Length)];
+			this.monsterSoundSource.Play();
+			this.StartCoroutine(this.ObserveSound(CHASE_TIMEOUT_SOUND_PLAY));
+		}
 	}
 
-	private IEnumerator ObserveIdleSound() {
-		yield return new WaitForSeconds (this.monsterSoundSource.clip.length);
+	private IEnumerator ObserveSound(float additionalDelay) {
+		yield return new WaitForSeconds (this.monsterSoundSource.clip.length + additionalDelay);
 		this.makingNoise = false;
-		this.idleTimeoutTime = 0.0f;
 	}
+
 
 	public void SetAnimationFromType(EnemyAI.EnemyActionType actionType) {
 		if (this.enemyActionType == actionType || this.attacking == true) {

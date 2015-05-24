@@ -13,13 +13,41 @@ public class EnemyAnimation : MonoBehaviour {
 
 	[SerializeField] private Animation animComponent;
 
-	private EnemyAI.EnemyActionType enemyActionType;
+	[SerializeField] private AudioSource[] footstepAudioList;
 
+	private const float FOOTSTEP_PATROL_DELAY = 1.5f;
+	private const float FOOTSTEP_CHASE_DELAY = 0.4f;
+
+	private float footstepPlayTime = 0.0f;
+	private EnemyAI.EnemyActionType enemyActionType;
 	private bool attacking = false;
 
 	// Use this for initialization
 	void Start () {
 	
+	}
+
+	void Update() {
+		if (this.enemyActionType == EnemyAI.EnemyActionType.PATROLLING) {
+			this.PlayFootstep(FOOTSTEP_PATROL_DELAY);
+		}
+		else if(this.enemyActionType == EnemyAI.EnemyActionType.CHASING) {
+			this.PlayFootstep(FOOTSTEP_CHASE_DELAY);
+		}
+		else if(this.enemyActionType == EnemyAI.EnemyActionType.IDLE) {
+			this.footstepPlayTime = 0.0f;
+		}
+	}
+
+	private void PlayFootstep(float delay) {
+		this.footstepPlayTime += Time.deltaTime;
+		
+		if(this.footstepPlayTime >= delay) {
+			this.footstepPlayTime = 0.0f;
+			
+			this.footstepAudioList[Random.Range(0, this.footstepAudioList.Length)].Play();
+			
+		}
 	}
 
 	public void SetAnimationFromType(EnemyAI.EnemyActionType actionType) {

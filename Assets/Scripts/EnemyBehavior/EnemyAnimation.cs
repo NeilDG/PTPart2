@@ -139,6 +139,7 @@ public class EnemyAnimation : MonoBehaviour {
 	private IEnumerator HandleAttackAnim(string attackClipName) {
 		//Debug.LogWarning ("attack length: " + this.animComponent.GetClip (attackClipName).length);
 		yield return new WaitForSeconds(this.animComponent.GetClip(attackClipName).length);
+		PlayerHP.Instance.AttackHit ();
 		this.attacking = false;
 	}
 

@@ -14,13 +14,22 @@ public class EnemyAnimation : MonoBehaviour {
 	[SerializeField] private Animation animComponent;
 
 	[SerializeField] private AudioSource[] footstepAudioList;
+	[SerializeField] private AudioClip[] idleSoundList;
+
+	[SerializeField] private AudioSource monsterSoundSource;
 
 	private const float FOOTSTEP_PATROL_DELAY = 1.5f;
 	private const float FOOTSTEP_CHASE_DELAY = 0.4f;
 
+	private const float CHANCE_TO_MAKE_IDLE_NOISE = 100.0f; //out of 100;
+	private const float IDLE_TIMEOUT_SOUND_PLAY = 2.0f;
+
 	private float footstepPlayTime = 0.0f;
+	private float idleTimeoutTime = 0.0f;
 	private EnemyAI.EnemyActionType enemyActionType;
+
 	private bool attacking = false;
+	private bool makingNoise = false;
 
 	// Use this for initialization
 	void Start () {
@@ -36,6 +45,7 @@ public class EnemyAnimation : MonoBehaviour {
 		}
 		else if(this.enemyActionType == EnemyAI.EnemyActionType.IDLE) {
 			this.footstepPlayTime = 0.0f;
+			this.PlayRandomIdleSound();
 		}
 	}
 
@@ -48,6 +58,33 @@ public class EnemyAnimation : MonoBehaviour {
 			this.footstepAudioList[Random.Range(0, this.footstepAudioList.Length)].Play();
 			
 		}
+	}
+
+	private void PlayRandomIdleSound() {
+		this.idleTimeoutTime += Time.deltaTime;
+		if (this.makingNoise == false && this.idleTimeoutTime >= IDLE_TIMEOUT_SOUND_PLAY) {
+			float chance = Random.Range(0.0f, 100.0f);
+
+			if(chance <= CHANCE_TO_MAKE_IDLE_NOISE) {
+				this.makingNoise = true;
+				this.monsterSoundSource.clip = this.idleSoundList[Random.Range(0,this.idleSoundList.Length)];
+				this.monsterSoundSource.Play();
+				this.StartCoroutine(this.ObserveIdleSound());
+			}
+			else {
+				this.idleTimeoutTime = 0.0f;
+			}
+		}
+	}
+
+	private void PlayRandomAlertSound() {
+
+	}
+
+	private IEnumerator ObserveIdleSound() {
+		yield return new WaitForSeconds (this.monsterSoundSource.clip.length);
+		this.makingNoise = false;
+		this.idleTimeoutTime = 0.0f;
 	}
 
 	public void SetAnimationFromType(EnemyAI.EnemyActionType actionType) {

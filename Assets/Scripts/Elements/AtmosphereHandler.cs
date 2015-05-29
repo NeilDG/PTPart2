@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class AtmosphereHandler : MonoBehaviour {
 	private static AtmosphereHandler sharedInstance = null;
-	public AtmosphereHandler Instance {
+	public static AtmosphereHandler Instance {
 		get {
 			return sharedInstance;
 		}
@@ -42,9 +42,13 @@ public class AtmosphereHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.CreateAmbientFeel ();
-
 		this.startTime = Time.time;
+
+		EventBroadcaster.Instance.AddObserver(EventNames.ON_MAIN_EVENT_GAME_STARTED, this.CreateAmbientFeel);
+	}
+
+	void OnDestroy() {
+		EventBroadcaster.Instance.RemoveActionAtObserver(EventNames.ON_MAIN_EVENT_GAME_STARTED, this.CreateAmbientFeel);
 	}
 
 	void Update() {
@@ -123,6 +127,11 @@ public class AtmosphereHandler : MonoBehaviour {
 		yield return new WaitForSeconds(this.ambientSource.clip.length);
 
 		this.CreateAmbientFeel ();
+	}
+
+	public void PlayAmbientEventSound(AudioClip audioClip) {
+		this.ambientSource.clip = audioClip;
+		this.ambientSource.Play();
 	}
 	
 }

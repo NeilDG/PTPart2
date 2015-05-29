@@ -68,6 +68,7 @@ public class PlayerHP : MonoBehaviour {
 
 	private IEnumerator DelayRestartLevel() {
 		yield return new WaitForSeconds(this.playerSource.clip.length + 2.0f);
-		Application.LoadLevel(Application.loadedLevel);
+		Screen.showCursor = true;
+		Application.LoadLevel(SceneNames.MAIN_MENU_SCENE);
 	}
 }

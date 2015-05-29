@@ -36,6 +36,11 @@ public class PreparationState : GameState {
 	private IEnumerator InitiateClosure() {
 		//play events prior to moving to main event
 		Debug.Log("initiate closure!!");
+		EventsInitiator.Instance.InitiateTremorEvent();
+
+		Debug.Log("Tremor event finished!!");
+		yield return new WaitForSeconds(GameFlowConstants.RandomizeTrevorDuration());
+
 		CeilingLightsHandler.Instance.InitiateLightsOutEvent();
 
 		while(this.lightsOutEventTriggered == false) {

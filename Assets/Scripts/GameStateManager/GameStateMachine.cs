@@ -65,6 +65,7 @@ public class GameStateMachine : MonoBehaviour {
 	private void InitializeStateMachine() {
 		//fill up state table
 		this.stateTable.Add(StateType.PRE_GAME, new PreparationState());
+		this.stateTable.Add(StateType.MAIN_EVENT_GAME, new MainGameState());
 	}
 
 	public void ChangeState(GameStateMachine.StateType newStateType) {

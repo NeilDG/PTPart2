@@ -11,19 +11,12 @@ public class MainMenuView : View {
 	
 	}
 
-	public void ForceStartGame() {
-		LoadManager.LoadScene (SceneNames.IN_GAME_SCENE,false);
-	}
-
-	public void OnServerClicked(){
-		ViewHandler.Instance.Show (ViewNames.SERVER_PANEL_STRING);
-	}
-
-	public void OnClientClicked(){
-		ViewHandler.Instance.Show (ViewNames.CLIENT_PANEL_STRING);
+	public void OnStartClicked() {
+		Screen.showCursor = false;
+		Application.LoadLevel(SceneNames.SAMPLE_TEST_SCENE);
 	}
 
 	public void OnQuitClicked(){
-		ViewHandler.Instance.Show (ViewNames.QUIT_PANEL_STRING);
+		Application.Quit();
 	}
 }

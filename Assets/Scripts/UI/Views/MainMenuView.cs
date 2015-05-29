@@ -13,7 +13,7 @@ public class MainMenuView : View {
 
 	public void OnStartClicked() {
 		Screen.showCursor = false;
-		Application.LoadLevel(SceneNames.SAMPLE_TEST_SCENE);
+		Application.LoadLevel(SceneNames.IN_GAME_SCENE);
 	}
 
 	public void OnQuitClicked(){

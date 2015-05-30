@@ -9,17 +9,25 @@ public class EnemySpawner : MonoBehaviour {
 	[SerializeField] private AudioClip[] spawnSoundList;
 	[SerializeField] private AudioSource monsterSpawnSource;
 	[SerializeField] private GameObject enemyPrefab;
-
-	private const float DELAY_BEFORE_SPAWN = 20.0f;
+	
 	private const float Y_OFFSET = 0.09f;
 
 	// Use this for initialization
 	void Start () {
-		this.StartCoroutine (this.WaitForSpawn ());
+		EventBroadcaster.Instance.AddObserver(EventNames.ON_MAIN_EVENT_GAME_STARTED, this.OnMainEventStarted);
+	}
+
+	void OnDestroy() {
+		EventBroadcaster.Instance.RemoveActionAtObserver(EventNames.ON_MAIN_EVENT_GAME_STARTED, this.OnMainEventStarted);
+	}
+
+	public void OnMainEventStarted() {
+		this.StartCoroutine(this.WaitForSpawn());
+		Debug.Log("Monster spawning initiated");
 	}
 
 	private IEnumerator WaitForSpawn() {
-		yield return new WaitForSeconds(DELAY_BEFORE_SPAWN);
+		yield return new WaitForSeconds(GameFlowConstants.RandomizeMonsterDelay());
 		this.SpawnEnemy ();
 	}
 

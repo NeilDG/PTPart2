@@ -18,8 +18,9 @@ public class GameStateMachine : MonoBehaviour {
 	//define custom game states here
 	public enum StateType {
 		INITIALIZE,
-		MAIN_GAME,
-		POST_GAME,
+		PRE_GAME,
+		MAIN_EVENT_GAME,
+		POST_EVENT_GAME,
 		END,
 	}
 
@@ -58,14 +59,13 @@ public class GameStateMachine : MonoBehaviour {
 		yield return new WaitForSeconds (this.delayUntilStart);
 
 		//set start state
-		this.currentState = this.stateTable [StateType.INITIALIZE];
-		this.currentState.OnStart ();
-
-		LoadManager.ReportLoadComplete ();
+		this.ChangeState(StateType.PRE_GAME);
 	}
 
 	private void InitializeStateMachine() {
 		//fill up state table
+		this.stateTable.Add(StateType.PRE_GAME, new PreparationState());
+		this.stateTable.Add(StateType.MAIN_EVENT_GAME, new MainGameState());
 	}
 
 	public void ChangeState(GameStateMachine.StateType newStateType) {

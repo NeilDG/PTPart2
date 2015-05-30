@@ -5,15 +5,16 @@ using System.Collections;
 /// Handles playing of footsteps
 /// </summary>
 public class FootstepPlayer : MonoBehaviour {
+	[SerializeField] private CharacterMotor motor;
 	[SerializeField] private AudioSource[] audioSteps;
 
-	private const float FOOTSTEP_PLAY_DELAY = 0.5f;
+	private float footstepPlayDelay = 0.5f;
 	private float nextPlayTime = 0.0f;
 	private float currentPlayTime = 0.0f;
 
 	// Use this for initialization
 	void Start () {
-		this.nextPlayTime += FOOTSTEP_PLAY_DELAY;
+		this.nextPlayTime += footstepPlayDelay;
 	}
 	
 	// Update is called once per frame
@@ -26,12 +27,22 @@ public class FootstepPlayer : MonoBehaviour {
 		else {
 			this.currentPlayTime = 0.0f;
 		}
-	}
+
+		
+		if(Input.GetKeyDown(KeyCode.LeftShift)) {
+			this.footstepPlayDelay = 0.25f;
+			this.motor.movement.maxForwardSpeed = PlayerConstants.PLAYER_RUN_SPEED;
+		}
+		else if(Input.GetKeyUp(KeyCode.LeftShift)) {
+			this.footstepPlayDelay = 0.5f;
+			this.motor.movement.maxForwardSpeed = PlayerConstants.PLAYER_WALK_SPEED;
+		}
+}
 
 	private void PlayFootstep() {
 		this.currentPlayTime += Time.deltaTime;
 
-		if(this.currentPlayTime >= FOOTSTEP_PLAY_DELAY) {
+		if(this.currentPlayTime >= this.footstepPlayDelay) {
 			this.currentPlayTime = 0.0f;
 
 			this.audioSteps[Random.Range(0, this.audioSteps.Length)].Play();

@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class AtmosphereHandler : MonoBehaviour {
 	private static AtmosphereHandler sharedInstance = null;
-	public AtmosphereHandler Instance {
+	public static AtmosphereHandler Instance {
 		get {
 			return sharedInstance;
 		}
@@ -25,16 +25,22 @@ public class AtmosphereHandler : MonoBehaviour {
 		NONE
 	}
 
+	
+	private const int MIN_AMBIENCE_DELAY = 4;
+	private const int MAX_AMBIENCE_DELAY = 10;
+	
+	private const float BGM_FADEIN_TIME = 2.0f;
+	private const float BGM_FADEOUT_TIME = 8.0f;
+	
+	private const float AMBIENT_START_DELAY = 20.0f;
+	
+	private const float AMBIENT_PLAY_SOUND_VOLUME = 1.0f;
+	private const float AMBIENT_FEEL_SOUND_VOLUME = 0.4f;
+
 	private BGMState bgmState = BGMState.NONE;
 	private float bgmMeasureTime = 0.0f;
 	private float startTime = 0.0f;
-
-	private const int MIN_AMBIENCE_DELAY = 4;
-	private const int MAX_AMBIENCE_DELAY = 10;
-
-	private const float BGM_FADEIN_TIME = 2.0f;
-	private const float BGM_FADEOUT_TIME = 8.0f;
-	private const float AMBIENT_START_DELAY = 20.0f;
+	private bool bgmPermitted = false;
 
 	void Awake () {
 		sharedInstance = this;
@@ -42,12 +48,23 @@ public class AtmosphereHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.CreateAmbientFeel ();
-
 		this.startTime = Time.time;
+
+		EventBroadcaster.Instance.AddObserver(EventNames.ON_MAIN_EVENT_GAME_STARTED, this.CreateAmbientFeel);
+		EventBroadcaster.Instance.AddObserver (EventNames.ON_MAIN_EVENT_GAME_STARTED, this.PermitBGM);
+	}
+
+	void OnDestroy() {
+		EventBroadcaster.Instance.RemoveActionAtObserver(EventNames.ON_MAIN_EVENT_GAME_STARTED, this.CreateAmbientFeel);
+		EventBroadcaster.Instance.RemoveActionAtObserver (EventNames.ON_MAIN_EVENT_GAME_STARTED, this.PermitBGM);
 	}
 
 	void Update() {
+
+		if (this.bgmPermitted == false) {
+			return;
+		}
+
 		switch (this.bgmState) {
 		case BGMState.FADE_IN:
 			this.bgmMeasureTime = Time.time - this.startTime;
@@ -94,7 +111,12 @@ public class AtmosphereHandler : MonoBehaviour {
 	}
 
 	private void CreateAmbientFeel() {
+		this.ambientSource.volume = AMBIENT_FEEL_SOUND_VOLUME;
 		this.StartCoroutine (this.DelayAmbientFeel ());
+	}
+
+	private void PermitBGM() {
+		this.bgmPermitted = true;
 	}
 
 	private void CreateBGM() {
@@ -123,6 +145,12 @@ public class AtmosphereHandler : MonoBehaviour {
 		yield return new WaitForSeconds(this.ambientSource.clip.length);
 
 		this.CreateAmbientFeel ();
+	}
+
+	public void PlayAmbientEventSound(AudioClip audioClip) {
+		this.ambientSource.volume = AMBIENT_PLAY_SOUND_VOLUME;
+		this.ambientSource.clip = audioClip;
+		this.ambientSource.Play();
 	}
 	
 }

@@ -17,6 +17,9 @@ public class PlayerHP : MonoBehaviour {
 	[SerializeField] private AudioClip dieAudioClip;
 	[SerializeField] private AudioSource playerSource;
 
+	[SerializeField] private MouseLook mouseLookX;
+	[SerializeField] private MouseLook mouseLookY;
+
 	private const int MAX_PLAYER_HIT = 2;
 	private int currentNumHits = 0;
 
@@ -53,6 +56,10 @@ public class PlayerHP : MonoBehaviour {
 			
 			this.playerSource.clip = this.hurtClipList [Random.Range (0, this.hurtClipList.Length)];
 			this.playerSource.Play ();
+
+			//simulate hit effect by moving the camera
+			this.mouseLookX.SimulateHit();
+			this.mouseLookY.SimulateHit();
 		}
 		else {
 			CharacterController characterControl = this.GetComponent<CharacterController>();

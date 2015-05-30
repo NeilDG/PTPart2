@@ -25,7 +25,7 @@ public class PreparationState : GameState {
 	{
 		this.currentTime += Time.deltaTime;
 
-		Debug.Log("Current time: " +this.currentTime+ " Random time: " +this.randomTime);
+		//Debug.Log("Current time: " +this.currentTime+ " Random time: " +this.randomTime);
 
 		if(this.currentTime >= this.randomTime && this.hasTriggeredClosure == false) {
 			this.hasTriggeredClosure = true;

@@ -21,21 +21,20 @@ public class CeilingLightsHandler : MonoBehaviour {
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
 	public void InitiateLightsOutEvent() {
 		this.StartCoroutine(this.LightsOutCouroutine());
 	}
 
 	private IEnumerator LightsOutCouroutine() {
+
+		float fogIteration = GameFlowConstants.FOG_DENSITY / this.lightsRowList.Length;
+
 		for(int i = 0; i < this.lightsRowList.Length; i++) {
 			this.lightsRowList[i].Play();
 			this.DeactivateLights(this.lightsRowList[i].transform);
 
+			RenderSettings.fogDensity += fogIteration;
 			yield return new WaitForSeconds(GameFlowConstants.LIGHTS_OUT_DELAY);
 		}
 

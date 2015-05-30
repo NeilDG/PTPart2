@@ -53,11 +53,43 @@ public class MouseLook : MonoBehaviour {
 			transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
 		}
 	}
+
+	public void SimulateHit() {
+		if (axes == RotationAxes.MouseXAndY)
+		{
+			float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
+			
+			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+			rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
+			
+			transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+		}
+		else if (axes == RotationAxes.MouseX)
+		{
+			float randomVal = Random.Range(2.0f, 4.0f);
+			transform.Rotate(0, randomVal * sensitivityX, 0);
+		}
+		else
+		{
+			float randomVal = Random.Range(-30.0f, 30.0f);
+			transform.localEulerAngles = new Vector3(-randomVal, transform.localEulerAngles.y, 0);
+		}
+	}
 	
 	void Start ()
 	{
 		// Make the rigid body not change rotation
 		if (GetComponent<Rigidbody>())
 			GetComponent<Rigidbody>().freezeRotation = true;
+
+		//this.StartCoroutine (this.SimulateHitTest ());
+	}
+
+	private IEnumerator SimulateHitTest() {
+		for(int i = 0 ; i < 5; i++) {
+			yield return new WaitForSeconds (1.0f);
+			this.SimulateHit ();
+		}
+
 	}
 }

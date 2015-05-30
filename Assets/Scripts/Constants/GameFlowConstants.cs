@@ -3,8 +3,8 @@ using System.Collections;
 
 public class GameFlowConstants {
 
-	public const float MINIMUM_PREPARATION_TIME = 5.0f;//30.0f;
-	public const float MAXIMUM_PREPARATION_TIME = 7.0f;//60.0f;
+	public const float MINIMUM_PREPARATION_TIME = 30.0f;//30.0f;
+	public const float MAXIMUM_PREPARATION_TIME = 60.0f;//60.0f;
 
 	public const float MIN_MONSTER_DELAY_APPEAR = 15.0f;
 	public const float MAX_MONSTER_DELAY_APPEAR = 60.0f;

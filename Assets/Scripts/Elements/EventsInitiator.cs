@@ -10,7 +10,7 @@ public class EventsInitiator : MonoBehaviour {
 		}
 	}
 
-
+	[SerializeField] private GameEvent[] gameEventList;
 	[SerializeField] private AudioClip[] eventShakeClip;
 
 	void Awake() {
@@ -22,6 +22,15 @@ public class EventsInitiator : MonoBehaviour {
 	public void InitiateTremorEvent() {
 		int randomIndex = Random.Range(0 , this.eventShakeClip.Length);
 
+		this.ActivateGameEvent (GameEventNames.CAMERA_SHAKE_EVENT_NAME);
 		AtmosphereHandler.Instance.PlayAmbientEventSound(this.eventShakeClip[randomIndex]);
+	}
+
+	public void ActivateGameEvent(string gameEventName) {
+		foreach(GameEvent gameEvent in this.gameEventList) {
+			if(gameEvent.GetGameEventName() == gameEventName) {
+				gameEvent.gameObject.SetActive(true);
+			}
+		}
 	}
 }

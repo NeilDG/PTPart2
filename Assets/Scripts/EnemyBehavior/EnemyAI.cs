@@ -96,6 +96,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 	private void TransitionToChasing() {
 		this.currentActionType = EnemyActionType.CHASING;
 		this.navMeshAgent.speed = EnemyConstants.CHASE_SPEED;
+		this.navMeshAgent.acceleration = EnemyConstants.DEFAULT_ACCELERATION;
 		this.enemyAnim.SetAnimationFromType (this.currentActionType);
 	}
 
@@ -135,6 +136,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 
 				if(Vector3.Distance(this.lastPlayerSighting, this.transform.position) <= EnemyConstants.CHASE_STOPPING_DISTANCE) {
 					this.enemyAnim.PlayAttackAnim();
+					this.navMeshAgent.acceleration = 60.0f;
 					this.navMeshAgent.Stop();
 					
 				}

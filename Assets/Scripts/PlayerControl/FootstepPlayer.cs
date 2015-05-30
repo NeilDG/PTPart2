@@ -34,6 +34,7 @@ public class FootstepPlayer : MonoBehaviour {
 			this.motor.movement.maxForwardSpeed = PlayerConstants.PLAYER_RUN_SPEED;
 		}
 		else if(Input.GetKeyUp(KeyCode.LeftShift)) {
+			this.footstepPlayDelay = 0.5f;
 			this.motor.movement.maxForwardSpeed = PlayerConstants.PLAYER_WALK_SPEED;
 		}
 }

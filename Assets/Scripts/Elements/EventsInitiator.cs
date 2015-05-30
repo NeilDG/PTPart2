@@ -15,6 +15,8 @@ public class EventsInitiator : MonoBehaviour {
 
 	void Awake() {
 		sharedInstance = this;
+
+		RenderSettings.fogDensity = 0.0f; //let ceiling lights change the fog density
 	}
 
 	public void InitiateTremorEvent() {

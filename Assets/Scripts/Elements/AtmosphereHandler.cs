@@ -34,7 +34,11 @@ public class AtmosphereHandler : MonoBehaviour {
 
 	private const float BGM_FADEIN_TIME = 2.0f;
 	private const float BGM_FADEOUT_TIME = 8.0f;
+
 	private const float AMBIENT_START_DELAY = 20.0f;
+
+	private const float AMBIENT_PLAY_SOUND_VOLUME = 1.0f;
+	private const float AMBIENT_FEEL_SOUND_VOLUME = 0.4f;
 
 	void Awake () {
 		sharedInstance = this;
@@ -98,6 +102,7 @@ public class AtmosphereHandler : MonoBehaviour {
 	}
 
 	private void CreateAmbientFeel() {
+		this.ambientSource.volume = AMBIENT_FEEL_SOUND_VOLUME;
 		this.StartCoroutine (this.DelayAmbientFeel ());
 	}
 
@@ -130,6 +135,7 @@ public class AtmosphereHandler : MonoBehaviour {
 	}
 
 	public void PlayAmbientEventSound(AudioClip audioClip) {
+		this.ambientSource.volume = AMBIENT_PLAY_SOUND_VOLUME;
 		this.ambientSource.clip = audioClip;
 		this.ambientSource.Play();
 	}

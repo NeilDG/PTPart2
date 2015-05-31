@@ -49,6 +49,8 @@ public class ViewHandler : MonoBehaviour {
 
 	public void Show(string screenName) {
 
+		if (screenName == "")
+				return;
 		//Debug.LogWarning("Show " + screenName);
 
 		View view;
@@ -169,7 +171,12 @@ public class ViewHandler : MonoBehaviour {
 	}
 
 	public View GetActiveView() {
-		return this.activeViews[this.activeViews.Count - 1];
+		if(this.activeViews.Count == 0) {
+			return null;
+		}
+		else {
+			return this.activeViews[this.activeViews.Count - 1];
+		}
 	}
 
 	/// <summary>
@@ -288,7 +295,7 @@ public class ViewHandler : MonoBehaviour {
 		}
 
 
-		this.RearrangeOverlay();
+		//this.RearrangeOverlay();
 		this.StartCoroutine(this.DelayViewHiddenFinished());
 
 		View newActiveView = this.GetActiveView();

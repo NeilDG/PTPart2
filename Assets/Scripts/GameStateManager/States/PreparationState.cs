@@ -19,6 +19,10 @@ public class PreparationState : GameState {
 		this.randomTime = GameFlowConstants.RandomizePreparationTime();
 
 		EventBroadcaster.Instance.AddObserver(EventNames.ON_LIGHTS_OUT_EVENT_FINISHED, this.OnReceivedLightsOutEvent);
+
+		ObjectiveView.ShowObjective (DialogConstants.OBJECTIVE_1_STRING);
+
+		GameStateMachine.Instance.StartCoroutine (this.SimulateTutorialFeedback ());
 	}
 
 	public override void OnUpdate ()
@@ -31,6 +35,18 @@ public class PreparationState : GameState {
 			this.hasTriggeredClosure = true;
 			GameStateMachine.Instance.StartCoroutine(this.InitiateClosure());
 		}
+	}
+
+	private IEnumerator SimulateTutorialFeedback() {
+		yield return new WaitForSeconds (GameFlowConstants.DELAY_BEFORE_SHOW_TUTORIAL);
+		ObjectiveView.ShowObjective (DialogConstants.TUTORIAL_1_STRING);
+
+		yield return new WaitForSeconds (GameFlowConstants.DELAY_BEFORE_SHOW_TUTORIAL);
+		ObjectiveView.ShowObjective (DialogConstants.TUTORIAL_2_STRING);
+
+		yield return new WaitForSeconds (GameFlowConstants.DELAY_BEFORE_SHOW_TUTORIAL);
+		ObjectiveView.ShowObjective (DialogConstants.TUTORIAL_3_STRING);
+
 	}
 
 	private IEnumerator InitiateClosure() {

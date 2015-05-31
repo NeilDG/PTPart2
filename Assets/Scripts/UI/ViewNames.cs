@@ -15,4 +15,5 @@ public class ViewNames {
 	public const string QUIT_PANEL_STRING = "QuitPanel";
 
 	public const string TEST_PANEL_STRING = "TestPanel";
+	public const string OBJECTIVE_PANEL_STRING = "ObjectivePanel";
 }

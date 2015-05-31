@@ -10,6 +10,8 @@ public class MainGameState : GameState {
 	{
 		EventBroadcaster.Instance.PostEvent(EventNames.ON_MAIN_EVENT_GAME_STARTED);
 		Debug.Log("Main event started!");
+
+		ObjectiveView.ShowObjective (DialogConstants.OBJECTIVE_2_STRING);
 	}
 
 	public override void OnUpdate ()

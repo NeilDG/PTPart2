@@ -12,8 +12,7 @@ public class MainMenuView : View {
 	}
 
 	public void OnStartClicked() {
-		Screen.showCursor = false;
-		Application.LoadLevel(SceneNames.IN_GAME_SCENE);
+		Application.LoadLevel(SceneNames.BRIGHTNESS_ADJUSTMENT_SCENE);
 	}
 
 	public void OnQuitClicked(){

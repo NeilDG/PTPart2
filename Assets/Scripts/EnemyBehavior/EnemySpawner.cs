@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour {
 	[SerializeField] private AudioSource monsterSpawnSource;
 	[SerializeField] private GameObject enemyPrefab;
 	
-	private const float Y_OFFSET = 0.09f;
+	private const float Y_OFFSET = 0.00f;
 
 	// Use this for initialization
 	void Start () {

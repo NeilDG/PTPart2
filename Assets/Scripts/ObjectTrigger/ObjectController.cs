@@ -4,6 +4,8 @@ using System.Collections;
 public class ObjectController : MonoBehaviour 
 {
 	[SerializeField] private GameObject targetObject;
+	[SerializeField] private string targetObjectKey;
+	[SerializeField] private ObjectBehaveType behaveType;
 
 	// Use this for initialization
 	void Start () {
@@ -14,7 +16,7 @@ public class ObjectController : MonoBehaviour
 	{
 		if(c.tag == "Player")
 		{
-			ObjectManager.Instance.SetObjectBehaviour(ObjectConstants.STEEL_FALLING_NEAR_DOOR, ObjectBehaveType.AddRigidBody);
+			ObjectManager.Instance.SetObjectBehaviour(this.targetObjectKey, this.behaveType);
 			Debug.Log("Collided with:"+ this.gameObject.name);
 		}
 	}

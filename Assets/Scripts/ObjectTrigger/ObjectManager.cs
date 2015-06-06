@@ -6,7 +6,8 @@ using System.Collections.Generic;
 public enum ObjectBehaveType
 {
 	AddRigidBody,
-	MakeSound
+	MakeSound,
+	PlayAnimation
 }
 
 public class ObjectManager : MonoBehaviour 
@@ -66,8 +67,15 @@ public class ObjectManager : MonoBehaviour
 		}
 	}
 
-	public void SetObjectBehaviour(string objectKey, ObjectBehaveType type)
+	public void SetObjectBehaviour(string objectKey, ObjectBehaveType type, float delay = 0)
 	{
+		this.StartCoroutine(this.PlayObjectBehaviour(objectKey, type, delay));
+	}
+
+	private IEnumerator PlayObjectBehaviour(string objectKey, ObjectBehaveType type, float delay = 0)
+	{
+		yield return new WaitForSeconds(delay);
+
 		if(this.objectPool.ContainsKey(objectKey))
 		{
 			this.DoObjectBehaviour(this.objectPool[objectKey], type);
@@ -88,7 +96,10 @@ public class ObjectManager : MonoBehaviour
 			cf.constantForce.force = new Vector3(0,-50,0);
 			break;
 		case ObjectBehaveType.MakeSound:
-			
+			//Sounds
+			break;
+		case ObjectBehaveType.PlayAnimation:
+			//Play animation
 			break;
 		}
 	}

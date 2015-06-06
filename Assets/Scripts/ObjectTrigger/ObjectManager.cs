@@ -6,8 +6,10 @@ using System.Collections.Generic;
 public enum ObjectBehaveType
 {
 	AddRigidBody,
+	AddForce,
 	MakeSound,
-	PlayAnimation
+	PlayAnimation,
+	PlayParticle
 }
 
 public class ObjectManager : MonoBehaviour 
@@ -28,6 +30,14 @@ public class ObjectManager : MonoBehaviour
 	}
 
 	private Dictionary<string, GameObject> objectPool;
+	private bool isTriggersActive = true;
+
+	//TODO: @NeilDG set this to "true" when lights already went off
+	public bool IsTriggersActive
+	{
+		set { this.isTriggersActive = value; }
+		get { return this.isTriggersActive; }
+	}
 
 	void Awake()
 	{
@@ -37,10 +47,6 @@ public class ObjectManager : MonoBehaviour
 
 	void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.F5))
-		{
-			this.SetObjectBehaviour(ObjectConstants.STEEL_FALLING_NEAR_DOOR, ObjectBehaveType.AddRigidBody);
-		}
 	}
 
 	public void AddObjectToPool(string objectKey, GameObject obs)
@@ -67,15 +73,8 @@ public class ObjectManager : MonoBehaviour
 		}
 	}
 
-	public void SetObjectBehaviour(string objectKey, ObjectBehaveType type, float delay = 0)
+	public void SetObjectBehaviour(string objectKey, ObjectBehaveType type)
 	{
-		this.StartCoroutine(this.PlayObjectBehaviour(objectKey, type, delay));
-	}
-
-	private IEnumerator PlayObjectBehaviour(string objectKey, ObjectBehaveType type, float delay = 0)
-	{
-		yield return new WaitForSeconds(delay);
-
 		if(this.objectPool.ContainsKey(objectKey))
 		{
 			this.DoObjectBehaviour(this.objectPool[objectKey], type);
@@ -91,16 +90,48 @@ public class ObjectManager : MonoBehaviour
 		switch(type)
 		{
 		case ObjectBehaveType.AddRigidBody:
-			targetObject.AddComponent<Rigidbody>();
-			ConstantForce cf = targetObject.AddComponent<ConstantForce>();
-			cf.constantForce.force = new Vector3(0,-50,0);
+			this.DoRigidBodyBehaviour(targetObject);
+			break;
+		case ObjectBehaveType.AddForce:
+			this.DoAddForceBehaviour(targetObject);
 			break;
 		case ObjectBehaveType.MakeSound:
-			//Sounds
+			this.DoMakeSoundBehaviour(targetObject);
 			break;
 		case ObjectBehaveType.PlayAnimation:
-			//Play animation
+			this.DoPlayAnimationBehaviour(targetObject);
+			break;
+		case ObjectBehaveType.PlayParticle:
+			this.DoPlayParticleBehaviour(targetObject);
 			break;
 		}
+	}
+
+	private void DoRigidBodyBehaviour(GameObject targetObject)
+	{
+		ObjectController oc = targetObject.GetComponent<ObjectController>();
+		targetObject.AddComponent<Rigidbody>();
+		ConstantForce cf = targetObject.AddComponent<ConstantForce>();
+		cf.constantForce.force = new Vector3(0,-50,0);
+	}
+
+	private void DoAddForceBehaviour(GameObject targetObject)
+	{
+
+	}
+
+	private void DoMakeSoundBehaviour(GameObject targetObject)
+	{
+		
+	}
+
+	private void DoPlayAnimationBehaviour(GameObject targetObject)
+	{
+		
+	}
+
+	private void DoPlayParticleBehaviour(GameObject targetObject)
+	{
+		
 	}
 }

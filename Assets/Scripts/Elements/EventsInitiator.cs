@@ -29,8 +29,17 @@ public class EventsInitiator : MonoBehaviour {
 	public void ActivateGameEvent(string gameEventName) {
 		foreach(GameEvent gameEvent in this.gameEventList) {
 			if(gameEvent.GetGameEventName() == gameEventName) {
-				gameEvent.gameObject.SetActive(true);
+				gameEvent.OnStartEvent();
 			}
 		}
+	}
+
+	public bool IsGameEventActive(string gameEventName) {
+		foreach(GameEvent gameEvent in this.gameEventList) {
+			if(gameEvent.GetGameEventName() == gameEventName) {
+				return (gameEvent.isActiveAndEnabled);
+			}
+		}
+		return false;
 	}
 }

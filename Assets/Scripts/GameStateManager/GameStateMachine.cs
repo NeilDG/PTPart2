@@ -20,6 +20,7 @@ public class GameStateMachine : MonoBehaviour {
 		INITIALIZE,
 		PRE_GAME,
 		MAIN_EVENT_GAME,
+		GAME_ESCAPE_EVENT,
 		POST_EVENT_GAME,
 		END,
 	}
@@ -66,6 +67,7 @@ public class GameStateMachine : MonoBehaviour {
 		//fill up state table
 		this.stateTable.Add(StateType.PRE_GAME, new PreparationState());
 		this.stateTable.Add(StateType.MAIN_EVENT_GAME, new MainGameState());
+		this.stateTable.Add (StateType.GAME_ESCAPE_EVENT, new GameEscapeState ());
 	}
 
 	public void ChangeState(GameStateMachine.StateType newStateType) {
@@ -80,5 +82,9 @@ public class GameStateMachine : MonoBehaviour {
 			Debug.LogError(newStateType + " does not exist in state machine. Please make sure you have added it in InitializeStateMachine().");
 		}
 
+	}
+
+	public StateType GetGameState() {
+		return this.currentState.GetStateType ();
 	}
 }

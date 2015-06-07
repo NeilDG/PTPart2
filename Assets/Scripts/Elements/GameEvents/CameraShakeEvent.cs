@@ -11,10 +11,13 @@ public class CameraShakeEvent : GameEvent {
 	// Use this for initialization
 	public override void Start () {
 		base.Start ();
-
 		this.gameEventName = GameEventNames.CAMERA_SHAKE_EVENT_NAME;
 	}
 
+	public override void OnStartEvent ()
+	{
+		this.gameObject.SetActive (true);
+	}
 	
 	// Update is called once per frame
 	void Update () {

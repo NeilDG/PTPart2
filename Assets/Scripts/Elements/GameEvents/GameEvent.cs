@@ -11,11 +11,9 @@ public abstract class GameEvent : MonoBehaviour {
 		return this.gameEventName;
 	}
 
-	public void StartEvent() {
-		this.gameObject.SetActive (true);
-	}
-
 	public virtual void Start() {
 		this.gameObject.SetActive (false);
 	}
+
+	public abstract void OnStartEvent();
 }

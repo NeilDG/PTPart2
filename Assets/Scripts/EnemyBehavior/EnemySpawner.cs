@@ -29,6 +29,8 @@ public class EnemySpawner : MonoBehaviour {
 	private IEnumerator WaitForSpawn() {
 		yield return new WaitForSeconds(GameFlowConstants.RandomizeMonsterDelay());
 		this.SpawnEnemy ();
+
+		EventsInitiator.Instance.ActivateGameEvent (GameEventNames.MACHINE_ROOM_EVENT_NAME);
 	}
 
 	private void SpawnEnemy() {

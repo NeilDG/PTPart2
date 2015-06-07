@@ -35,6 +35,6 @@ public class CameraShakeEvent : GameEvent {
 
 	private void SetupForMachineIgnite() {
 		this.shakeValue = 5.0f;
-		this.decreaseFactor = 0.3f;
+		this.decreaseFactor = 0.2f;
 	}
 }

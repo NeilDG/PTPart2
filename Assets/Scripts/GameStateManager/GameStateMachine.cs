@@ -83,4 +83,8 @@ public class GameStateMachine : MonoBehaviour {
 		}
 
 	}
+
+	public StateType GetGameState() {
+		return this.currentState.GetStateType ();
+	}
 }

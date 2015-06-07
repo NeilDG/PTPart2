@@ -47,6 +47,10 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 
 		EventBroadcaster.Instance.AddObserver (EventNames.ON_ESCAPE_EVENT_STARTED, this.ForceChasePlayer);
 
+		if (GameStateMachine.Instance.GetGameState () == GameStateMachine.StateType.GAME_ESCAPE_EVENT) {
+			this.ForceChasePlayer();
+		}
+
 	}
 
 	void Destroy() {
@@ -82,6 +86,16 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 		case EnemyActionType.FORCE_CHASE:
 			this.enemyAnim.SetAnimationFromType(EnemyActionType.CHASING);
 			this.navMeshAgent.SetDestination (this.playerLocation.position);
+
+			if(Vector3.Distance(this.playerLocation.position, this.transform.position) <= EnemyConstants.CHASE_STOPPING_DISTANCE) {
+				this.enemyAnim.PlayAttackAnim();
+				this.navMeshAgent.acceleration = 60.0f;
+				this.navMeshAgent.Stop();
+				
+			}
+			else {
+				this.navMeshAgent.Resume();
+			}
 			break;
 		}
 	}

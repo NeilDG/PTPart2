@@ -28,7 +28,7 @@ public class CeilingLightsHandler : MonoBehaviour {
 
 	private IEnumerator LightsOutCouroutine() {
 
-		float fogIteration = GameFlowConstants.FOG_DENSITY / this.lightsRowList.Length;
+		float fogIteration = UserSettings.Instance.GetFogDensity() / this.lightsRowList.Length;
 
 		for(int i = 0; i < this.lightsRowList.Length; i++) {
 			this.lightsRowList[i].Play();

@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour {
 	[SerializeField] private AudioSource monsterSpawnSource;
 	[SerializeField] private GameObject enemyPrefab;
 	
-	private const float Y_OFFSET = 0.09f;
+	private const float Y_OFFSET = 0.00f;
 
 	// Use this for initialization
 	void Start () {
@@ -29,6 +29,8 @@ public class EnemySpawner : MonoBehaviour {
 	private IEnumerator WaitForSpawn() {
 		yield return new WaitForSeconds(GameFlowConstants.RandomizeMonsterDelay());
 		this.SpawnEnemy ();
+
+		EventsInitiator.Instance.ActivateGameEvent (GameEventNames.MACHINE_ROOM_EVENT_NAME);
 	}
 
 	private void SpawnEnemy() {

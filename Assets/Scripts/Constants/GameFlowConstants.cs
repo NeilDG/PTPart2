@@ -5,8 +5,8 @@ public class GameFlowConstants {
 
 	public const float DELAY_BEFORE_SHOW_TUTORIAL= 12.0f;
 
-	public const float MINIMUM_PREPARATION_TIME = 45.0f;//30.0f;
-	public const float MAXIMUM_PREPARATION_TIME = 70.0f;//60.0f;
+	public const float MINIMUM_PREPARATION_TIME = 45.0f;
+	public const float MAXIMUM_PREPARATION_TIME = 70.0f;
 
 	public const float MIN_MONSTER_DELAY_APPEAR = 15.0f;
 	public const float MAX_MONSTER_DELAY_APPEAR = 60.0f;
@@ -15,8 +15,7 @@ public class GameFlowConstants {
 	public const float MAX_TREMOR_DURATION = 14.0f;
 
 	public const float LIGHTS_OUT_DELAY = 0.45f;
-
-	public const float FOG_DENSITY = 0.3f;
+	public const float MAX_FOG_DENSITY = 0.5f;
 
 
 	public static float RandomizePreparationTime() {
@@ -36,4 +35,5 @@ public class GameFlowConstants {
 		
 		return value;
 	}
+
 }

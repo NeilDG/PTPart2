@@ -23,6 +23,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 		PATROLLING,
 		CHASING,
 		ATTACKING,
+		FORCE_CHASE,
 	}
 
 	private EnemyState currentEnemyState = EnemyState.ACTIVE;
@@ -43,6 +44,17 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 
 		this.enemyTriggerRadius.SetOnTriggerDelegate (this.HandleTriggerEnter, this.HandleTriggerStay, this.HandleTriggerExit);
 		GamePauseHandler.Instance.AttachClassToVisit (this, this);
+
+		EventBroadcaster.Instance.AddObserver (EventNames.ON_ESCAPE_EVENT_STARTED, this.ForceChasePlayer);
+
+		if (GameStateMachine.Instance.GetGameState () == GameStateMachine.StateType.GAME_ESCAPE_EVENT) {
+			this.ForceChasePlayer();
+		}
+
+	}
+
+	void Destroy() {
+		EventBroadcaster.Instance.RemoveActionAtObserver (EventNames.ON_ESCAPE_EVENT_STARTED, this.ForceChasePlayer);
 	}
 	
 	// Update is called once per frame
@@ -70,6 +82,20 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 		case EnemyActionType.CHASING:
 			break;
 		case EnemyActionType.ATTACKING:
+			break;
+		case EnemyActionType.FORCE_CHASE:
+			this.enemyAnim.SetAnimationFromType(EnemyActionType.CHASING);
+			this.navMeshAgent.SetDestination (this.playerLocation.position);
+
+			if(Vector3.Distance(this.playerLocation.position, this.transform.position) <= EnemyConstants.CHASE_STOPPING_DISTANCE) {
+				this.enemyAnim.PlayAttackAnim();
+				this.navMeshAgent.acceleration = 60.0f;
+				this.navMeshAgent.Stop();
+				
+			}
+			else {
+				this.navMeshAgent.Resume();
+			}
 			break;
 		}
 	}
@@ -100,6 +126,11 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 		this.enemyAnim.SetAnimationFromType (this.currentActionType);
 	}
 
+	private void ForceChasePlayer() {
+		this.TransitionToChasing ();
+		this.currentActionType = EnemyActionType.FORCE_CHASE;
+	}
+
 	private void HandleTriggerEnter(Collider other) {
 
 	}
@@ -112,6 +143,10 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 
 		if (this.currentEnemyState == EnemyState.RESTRICTED) {
 			this.navMeshAgent.ResetPath();
+			return;
+		}
+
+		if(this.currentActionType == EnemyActionType.FORCE_CHASE) {
 			return;
 		}
 
@@ -151,7 +186,7 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 	private void HandleTriggerExit(Collider other) {
 		CharacterController playerControl = other.gameObject.GetComponent<CharacterController> ();
 		
-		if (playerControl != null) {
+		if (playerControl != null && this.currentActionType != EnemyActionType.FORCE_CHASE) {
 			this.playerInSight = false;
 			this.TransitionToIdle();
 		}

@@ -42,6 +42,8 @@ public class AtmosphereHandler : MonoBehaviour {
 	private float startTime = 0.0f;
 	private bool bgmPermitted = false;
 
+	private bool ambientFeelPermitted = true;
+
 	void Awake () {
 		sharedInstance = this;
 	}
@@ -111,8 +113,10 @@ public class AtmosphereHandler : MonoBehaviour {
 	}
 
 	private void CreateAmbientFeel() {
-		this.ambientSource.volume = AMBIENT_FEEL_SOUND_VOLUME;
-		this.StartCoroutine (this.DelayAmbientFeel ());
+		if(this.ambientFeelPermitted == true) {
+			this.ambientSource.volume = AMBIENT_FEEL_SOUND_VOLUME;
+			this.StartCoroutine (this.DelayAmbientFeel ());
+		}
 	}
 
 	private void PermitBGM() {
@@ -131,6 +135,7 @@ public class AtmosphereHandler : MonoBehaviour {
 	private IEnumerator DelayAmbientFeel() {
 		yield return new WaitForSeconds (AMBIENT_START_DELAY);
 		this.StartCoroutine (this.PlayRandomAmbienceAndWait ());
+
 	}
 
 	private IEnumerator PlayRandomAmbienceAndWait() {
@@ -151,6 +156,18 @@ public class AtmosphereHandler : MonoBehaviour {
 		this.ambientSource.volume = AMBIENT_PLAY_SOUND_VOLUME;
 		this.ambientSource.clip = audioClip;
 		this.ambientSource.Play();
+	}
+
+	public void PlayAmbientEventSoundLoop(AudioClip audioClip, float volume) {
+		this.StopAllCoroutines ();
+		this.ambientSource.Stop ();
+
+		this.ambientSource.volume = volume;
+		this.ambientSource.clip = audioClip;
+		this.ambientSource.loop = true;
+		this.ambientSource.Play();
+
+		this.ambientFeelPermitted = false;
 	}
 	
 }

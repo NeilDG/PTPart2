@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraShakeEvent : GameEvent {
 
 	[SerializeField] private Camera camera;
-	[SerializeField] private float shakeValue = 0;
+	[SerializeField] private float shakeValue = 12.0f;
 	[SerializeField] private float shakeAmount = 0.7f;
 	[SerializeField] private float decreaseFactor = 1.0f;
 
@@ -17,6 +17,7 @@ public class CameraShakeEvent : GameEvent {
 	public override void OnStartEvent ()
 	{
 		this.gameObject.SetActive (true);
+
 	}
 	
 	// Update is called once per frame
@@ -27,7 +28,13 @@ public class CameraShakeEvent : GameEvent {
 			
 		} else {
 			shakeValue = 0.0f;
+			this.SetupForMachineIgnite();
 			this.gameObject.SetActive(false);
 		}	
+	}
+
+	private void SetupForMachineIgnite() {
+		this.shakeValue = 5.0f;
+		this.decreaseFactor = 0.3f;
 	}
 }

@@ -23,7 +23,7 @@ public class ObjectiveView : View {
 		this.Hide ();
 	}
 
-	public static void ShowObjective(string message) {
+	public static void ShowObjective(string message, float duration = DURATION) {
 		ViewHandler.Instance.Show (ViewNames.OBJECTIVE_PANEL_STRING);
 
 		ObjectiveView objectiveView = (ObjectiveView)ViewHandler.Instance.FindActiveView (ViewNames.OBJECTIVE_PANEL_STRING);

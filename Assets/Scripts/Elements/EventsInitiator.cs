@@ -33,4 +33,13 @@ public class EventsInitiator : MonoBehaviour {
 			}
 		}
 	}
+
+	public bool IsGameEventActive(string gameEventName) {
+		foreach(GameEvent gameEvent in this.gameEventList) {
+			if(gameEvent.GetGameEventName() == gameEventName) {
+				return (gameEvent.isActiveAndEnabled);
+			}
+		}
+		return false;
+	}
 }

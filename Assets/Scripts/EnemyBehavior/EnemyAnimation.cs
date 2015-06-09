@@ -33,6 +33,7 @@ public class EnemyAnimation : MonoBehaviour {
 	private bool attacking = false;
 	private bool makingNoise = false;
 
+
 	// Use this for initialization
 	void Start () {
 	
@@ -106,12 +107,15 @@ public class EnemyAnimation : MonoBehaviour {
 		switch (this.enemyActionType) {
 		case EnemyAI.EnemyActionType.IDLE:
 			this.PlayRandomAnimation(this.idleClipNames);
+			this.animComponent["Idle"].speed = 0.5f;
 			break;
 		case EnemyAI.EnemyActionType.PATROLLING:
 			this.PlayRandomAnimation(this.walkClipNames);
+			this.animComponent["Walk"].speed = 0.4f;
 			break;
 		case EnemyAI.EnemyActionType.CHASING:
 			this.PlayRandomAnimation(this.runClipNames);
+			this.animComponent["Run"].speed = 1.0f;
 			break;
 		case EnemyAI.EnemyActionType.ATTACKING:
 			break;
@@ -120,7 +124,7 @@ public class EnemyAnimation : MonoBehaviour {
 
 	private void PlayRandomAnimation(string[] clipList) {
 		int randomIndex = Random.Range (0, clipList.Length);
-		this.animComponent.Play (clipList [randomIndex]);
+		this.animComponent.CrossFade (clipList [randomIndex]);
 	}
 
 	/// <summary>
@@ -130,8 +134,9 @@ public class EnemyAnimation : MonoBehaviour {
 		if (this.attacking == false) {
 			this.attacking = true;
 			this.enemyActionType = EnemyAI.EnemyActionType.ATTACKING;
+			this.animComponent["Attack"].speed = 0.5f;
 			int randomIndex = Random.Range (0, this.attackClipNames.Length);
-			this.animComponent.Play(this.attackClipNames[randomIndex]);
+			this.animComponent.CrossFade(this.attackClipNames[randomIndex]);
 			this.StartCoroutine(this.HandleAttackAnim(this.attackClipNames[randomIndex]));
 		}
 	}

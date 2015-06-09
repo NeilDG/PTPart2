@@ -34,6 +34,8 @@ public class EnemyAI : MonoBehaviour, IPauseCommand, IResumeCommand {
 
 	private bool shouldWait = false;
 
+
+
 	void Awake(){
 	}
 
